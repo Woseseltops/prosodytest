@@ -1,0 +1,11 @@
+<!-- preparation_stage.html -->
+{% if stage %}
+  <h1>{{ stage.name }}</h1>
+  <p>Template: {{ stage.template }}</p>
+  <form method="get" action="/">
+    <input type="hidden" name="stage" value="{{ stage.id|default_if_none:'' }}">
+    <button type="submit">Next Stage</button>
+  </form>
+{% else %}
+  <p>No preparation stage found.</p>
+{% endif %}

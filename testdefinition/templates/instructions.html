@@ -1,0 +1,9 @@
+<!-- Instructions template -->
+<h1>Instructions</h1>
+<p>Follow the instructions carefully before starting the test.</p>
+
+<form method="post" action="/?run={{ testrun.id }}">
+  {% csrf_token %}
+  <input type="hidden" name="stage" value="{{ stage.id|default_if_none:'' }}">
+  <button type="submit">Next Stage</button>
+</form>

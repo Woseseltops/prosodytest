@@ -1,0 +1,9 @@
+<!-- Prompt template -->
+<h1>Prompt</h1>
+<p>{{ prompt }}</p>
+
+<form method="post" action="/?run={{ testrun.id }}">
+  {% csrf_token %}
+  <input type="hidden" name="stage" value="{{ stage.id|default_if_none:'' }}">
+  <button type="submit">Next Stage</button>
+</form>

@@ -1,0 +1,9 @@
+<!-- Mic Test template -->
+<h1>Microphone Test</h1>
+<p>Please test your microphone before continuing.</p>
+
+<form method="post" action="/?run={{ testrun.id }}">
+  {% csrf_token %}
+  <input type="hidden" name="stage" value="{{ stage.id|default_if_none:'' }}">
+  <button type="submit">Next Stage</button>
+</form>
