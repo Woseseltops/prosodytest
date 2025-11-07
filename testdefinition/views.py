@@ -1,13 +1,8 @@
+import base64
+
 from django.shortcuts import render
-from .models import ProsodyTestDefinition, PreparationPhaseStage
-
-from .models import ProsodyTestDefinition, PreparationPhaseStage, TestRun
-
-
-
-
-from .models import ExperimentPhaseStage, EvaluationPhaseStage
 from django.views.decorators.csrf import csrf_exempt
+from .models import ProsodyTestDefinition, PreparationPhaseStage, TestRun, ExperimentPhaseStage, EvaluationPhaseStage, Recording
 
 def get_all_stages_for_phase(test_def, phase):
 
@@ -62,8 +57,9 @@ def stage(request):
 
     stages = get_all_stages_for_phase(test_def, testrun.current_phase)
 
-    if request.POST.get('user_data'):
+    print(request.POST)
 
+    if request.POST.get('user_data') or request.POST.get('audio_data'):
         process_user_data(request.POST, testrun)
 
     # For experiment phase, iterate over prompts for each stage
@@ -128,6 +124,25 @@ def stage(request):
 
 def process_user_data(post_data, testrun):
 
-    participant_name = post_data.get('participant_name', 'Anonymous')
-    testrun.participant_name = participant_name
-    testrun.save()
+    if post_data.get('audio_data'):
+        audio_data = post_data['audio_data']
+        audio_bytes = base64.b64decode(audio_data)
+        prompt_text = post_data.get('prompt', '')
+
+        # Create Recording entry first
+        recording_entry = Recording.objects.create(file_path='', prompt=prompt_text)
+        filename = f"audio/{testrun.id}_{recording_entry.pk}.wav"
+        with open(filename, "wb") as f:
+            f.write(audio_bytes)
+
+        # Update file_path and save
+        recording_entry.file_path = filename
+        recording_entry.save()
+
+        # Link to TestRun
+        testrun.recording.add(recording_entry)
+
+    elif post_data.get('user_data'):
+        participant_name = post_data.get('participant_name', 'Anonymous')
+        testrun.participant_name = participant_name
+        testrun.save()

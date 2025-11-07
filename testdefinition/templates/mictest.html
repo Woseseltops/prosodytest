@@ -1,9 +1,53 @@
+
 <!-- Mic Test template -->
 <h1>Microphone Test</h1>
 <p>Please test your microphone before continuing.</p>
+
+{% include "recording_controls.html" with playback=True %}
+<div id="volume-container" style="margin-top:10px;">
+  <div style="width:200px; height:10px; background:#eee;">
+    <div id="volume-bar" style="height:10px; background:#4caf50; width:0;"></div>
+  </div>
+</div>
 
 <form method="post" action="/?run={{ testrun.id }}">
   {% csrf_token %}
   <input type="hidden" name="stage" value="{{ stage.id|default_if_none:'' }}">
   <button type="submit">Next Stage</button>
 </form>
+
+<script>
+let audioContext;
+let analyser;
+let source;
+let volumeAnimation;
+const volumeBar = document.getElementById('volume-bar');
+
+function updateVolume() 
+{
+  if (analyser) {
+    const dataArray = new Uint8Array(analyser.fftSize);
+    analyser.getByteTimeDomainData(dataArray);
+    let sum = 0;
+    for (let i = 0; i < dataArray.length; i++) {
+      sum += Math.abs(dataArray[i] - 128);
+    }
+    const average = sum / dataArray.length;
+    volumeBar.style.width = Math.min(average * 10, 200) + 'px';
+  }
+  volumeAnimation = requestAnimationFrame(updateVolume);
+}
+
+async function startVolumeMeter() 
+{
+  const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  source = audioContext.createMediaStreamSource(stream);
+  analyser = audioContext.createAnalyser();
+  analyser.fftSize = 256;
+  source.connect(analyser);
+  updateVolume();
+}
+
+startVolumeMeter();
+</script>
