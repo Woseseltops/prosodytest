@@ -69,17 +69,21 @@ def stage(request):
 
     if request.method == 'POST':
         if testrun.current_phase == 'experiment' and prompts:
-            # Advance prompt index first
-            if testrun.experiment_prompt_index < len(prompts) - 1:
+            # Cycle through stages for each prompt
+            total_prompts = len(prompts)
+            total_stages = len(stages)
+            current_flat_index = testrun.experiment_prompt_index
+            max_flat_index = total_prompts * total_stages - 1
+
+            if current_flat_index < max_flat_index:
                 testrun.experiment_prompt_index += 1
             else:
-                # Move to next stage or phase
+                # Move to evaluation phase
+                testrun.current_phase = 'evaluation'
+                testrun.current_stage_index = 0
                 testrun.experiment_prompt_index = 0
-                if testrun.current_stage_index < len(stages) - 1:
-                    testrun.current_stage_index += 1
-                else:
-                    testrun.current_phase = 'evaluation'
-                    testrun.current_stage_index = 0
+            testrun.save()
+            stages = get_all_stages_for_phase(test_def, testrun.current_phase)
         else:
             if testrun.current_stage_index < len(stages) - 1:
                 testrun.current_stage_index += 1
@@ -91,21 +95,27 @@ def stage(request):
                     testrun.experiment_prompt_index = 0
                 elif testrun.current_phase == 'evaluation':
                     return render(request, 'testdefinition/results.html', {'testrun': testrun})
-        testrun.save()
-        stages = get_all_stages_for_phase(test_def, testrun.current_phase)
-
-    # Get the current stage link
-    if 0 <= testrun.current_stage_index < len(stages):
-        stage_obj = stages[testrun.current_stage_index].stage
-    else:
-        return render(request, 'testdefinition/no_preparation_phase.html')
-
-    # For experiment phase, pass current prompt
-    current_prompt = None
-    if testrun.current_phase == 'experiment' and prompts:
-        if 0 <= testrun.experiment_prompt_index < len(prompts):
-            current_prompt = prompts[testrun.experiment_prompt_index]
             testrun.save()
+            stages = get_all_stages_for_phase(test_def, testrun.current_phase)
+
+    # Get the current stage and prompt for experiment phase
+    if testrun.current_phase == 'experiment' and prompts:
+        total_stages = len(stages)
+        total_prompts = len(prompts)
+        flat_index = testrun.experiment_prompt_index
+        if 0 <= flat_index < total_stages * total_prompts:
+            stage_index = flat_index % total_stages
+            prompt_index = flat_index // total_stages
+            stage_obj = stages[stage_index].stage
+            current_prompt = prompts[prompt_index]
+        else:
+            return render(request, 'testdefinition/no_preparation_phase.html')
+    else:
+        current_prompt = None
+        if 0 <= testrun.current_stage_index < len(stages):
+            stage_obj = stages[testrun.current_stage_index].stage
+        else:
+            return render(request, 'testdefinition/no_preparation_phase.html')
 
     if not stage_obj or not stage_obj.template:
         return render(request, 'testdefinition/no_template.html')
