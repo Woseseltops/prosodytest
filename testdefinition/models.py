@@ -17,6 +17,10 @@ class TestStage(models.Model):
 class Recording(models.Model):
     file_path = models.CharField(max_length=255)
     prompt = models.TextField()
+    testrun = models.ForeignKey('TestRun', on_delete=models.CASCADE, related_name='recordings')
+
+    def __str__(self):
+        return f"Recording {self.pk} for Run {self.testrun_id}: {self.file_path}"[:80]
 
 class PreparationPhaseStage(models.Model):
     prosody_test = models.ForeignKey('ProsodyTestDefinition', on_delete=models.CASCADE)
@@ -76,7 +80,9 @@ class TestRun(models.Model):
     participant_name = models.CharField(max_length=100)
     current_phase = models.CharField(max_length=20, choices=PHASE_CHOICES)
     current_stage_index = models.IntegerField()
-    recording = models.ManyToManyField(Recording)
     time = models.DateTimeField(auto_now_add=True)
     used_test_definition = models.ForeignKey('ProsodyTestDefinition', null=True, blank=True, on_delete=models.SET_NULL, related_name='runs')
     experiment_prompt_index = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f"Run {self.pk}: {self.participant_name} ({self.current_phase}, stage {self.current_stage_index})"
