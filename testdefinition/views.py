@@ -1,4 +1,3 @@
-
 from django.shortcuts import render
 from .models import ProsodyTestDefinition, PreparationPhaseStage
 
@@ -8,6 +7,7 @@ from .models import ProsodyTestDefinition, PreparationPhaseStage, TestRun
 
 
 from .models import ExperimentPhaseStage, EvaluationPhaseStage
+from django.views.decorators.csrf import csrf_exempt
 
 def get_all_stages_for_phase(test_def, phase):
 
@@ -61,6 +61,10 @@ def stage(request):
             request.session['testrun_id'] = testrun.id
 
     stages = get_all_stages_for_phase(test_def, testrun.current_phase)
+
+    if request.POST.get('user_data'):
+
+        process_user_data(request.POST, testrun)
 
     # For experiment phase, iterate over prompts for each stage
     prompts = []
@@ -121,3 +125,9 @@ def stage(request):
         return render(request, 'testdefinition/no_template.html')
 
     return render(request, stage_obj.template, {'stage': stage_obj, 'testrun': testrun, 'prompt': current_prompt})
+
+def process_user_data(post_data, testrun):
+
+    participant_name = post_data.get('participant_name', 'Anonymous')
+    testrun.participant_name = participant_name
+    testrun.save()
