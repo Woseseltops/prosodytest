@@ -1,4 +1,3 @@
-
 from django.db import models
 
 class Language(models.Model):
@@ -23,6 +22,26 @@ class Recording(models.Model):
         return f"Recording {self.pk} for Run {self.testrun_id}: {self.file_path}"[:80]
 
 class PreparationPhaseStage(models.Model):
+    prosody_test = models.ForeignKey('ProsodyTestDefinition', on_delete=models.CASCADE)
+    stage = models.ForeignKey(TestStage, on_delete=models.CASCADE)
+    order = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return f"{self.stage} (Order: {self.order})"
+
+class TrialTestPhaseStage(models.Model):
+    prosody_test = models.ForeignKey('ProsodyTestDefinition', on_delete=models.CASCADE)
+    stage = models.ForeignKey(TestStage, on_delete=models.CASCADE)
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ['order']
+        unique_together = ('prosody_test', 'stage')
+
+    def __str__(self):
+        return f"{self.stage} (Order: {self.order})"
+
+class MainTestPhaseStage(models.Model):
     prosody_test = models.ForeignKey('ProsodyTestDefinition', on_delete=models.CASCADE)
     stage = models.ForeignKey(TestStage, on_delete=models.CASCADE)
     order = models.PositiveIntegerField(default=0)
@@ -58,13 +77,16 @@ class EvaluationPhaseStage(models.Model):
     def __str__(self):
         return f"{self.stage} (Order: {self.order})"
 
+
 class ProsodyTestDefinition(models.Model):
     l1 = models.ForeignKey(Language, related_name='prosodytest_l1', on_delete=models.CASCADE)
     l2 = models.ForeignKey(Language, related_name='prosodytest_l2', on_delete=models.CASCADE)
     preparation_phase = models.ManyToManyField(TestStage, through='PreparationPhaseStage', related_name='preparation_phase')
-    experiment_phase = models.ManyToManyField(TestStage, through='ExperimentPhaseStage', related_name='experiment_phase')
+    trial_test_phase = models.ManyToManyField(TestStage, through='TrialTestPhaseStage', related_name='trial_test_phase')
+    main_test_phase = models.ManyToManyField(TestStage, through='MainTestPhaseStage', related_name='main_test_phase')
     evaluation_phase = models.ManyToManyField(TestStage, through='EvaluationPhaseStage', related_name='evaluation_phase')
-    prompts = models.TextField()
+    target_prompts = models.TextField(help_text='Prompts for the main test (one per line)', blank=True, null=True)
+    trial_prompts = models.TextField(help_text='Prompts for the trial/field test (one per line)', blank=True, null=True)
 
     def __str__(self):
         return f"Prosody Test: {self.l1} - {self.l2}"

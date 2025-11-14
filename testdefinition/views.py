@@ -2,14 +2,16 @@ import base64
 
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
-from .models import ProsodyTestDefinition, PreparationPhaseStage, TestRun, ExperimentPhaseStage, EvaluationPhaseStage, Recording
+from .models import ProsodyTestDefinition, PreparationPhaseStage, TestRun, TrialTestPhaseStage, MainTestPhaseStage, EvaluationPhaseStage, Recording
 
 def get_all_stages_for_phase(test_def, phase):
 
     if phase == 'preparation':
         return list(PreparationPhaseStage.objects.filter(prosody_test=test_def).order_by('order'))
-    elif phase == 'experiment':
-        return list(ExperimentPhaseStage.objects.filter(prosody_test=test_def).order_by('order'))
+    elif phase == 'trial':
+        return list(TrialTestPhaseStage.objects.filter(prosody_test=test_def).order_by('order'))
+    elif phase == 'main':
+        return list(MainTestPhaseStage.objects.filter(prosody_test=test_def).order_by('order'))
     elif phase == 'evaluation':
         return list(EvaluationPhaseStage.objects.filter(prosody_test=test_def).order_by('order'))
     return []
@@ -62,13 +64,15 @@ def stage(request):
     if request.POST.get('user_data') or request.POST.get('audio_data'):
         process_user_data(request.POST, testrun)
 
-    # For experiment phase, iterate over prompts for each stage
+    # For trial and main test phases, iterate over prompts for each stage
     prompts = []
-    if testrun.current_phase == 'experiment':
-        prompts = [p.strip() for p in test_def.prompts.split('\n')]
+    if testrun.current_phase == 'trial':
+        prompts = [p.strip() for p in (test_def.trial_prompts or '').split('\n') if p.strip()]
+    elif testrun.current_phase == 'main':
+        prompts = [p.strip() for p in (test_def.target_prompts or '').split('\n') if p.strip()]
 
     if request.method == 'POST':
-        if testrun.current_phase == 'experiment' and prompts:
+        if testrun.current_phase in ['trial', 'main'] and prompts:
             # Cycle through stages for each prompt
             total_prompts = len(prompts)
             total_stages = len(stages)
@@ -78,10 +82,16 @@ def stage(request):
             if current_flat_index < max_flat_index:
                 testrun.experiment_prompt_index += 1
             else:
-                # Move to evaluation phase
-                testrun.current_phase = 'evaluation'
-                testrun.current_stage_index = 0
-                testrun.experiment_prompt_index = 0
+                # Move to next phase
+                if testrun.current_phase == 'trial':
+                    testrun.current_phase = 'main'
+                    testrun.current_stage_index = 0
+                    testrun.experiment_prompt_index = 0
+                else:
+                    # Move to evaluation phase
+                    testrun.current_phase = 'evaluation'
+                    testrun.current_stage_index = 0
+                    testrun.experiment_prompt_index = 0
             testrun.save()
             stages = get_all_stages_for_phase(test_def, testrun.current_phase)
         else:
@@ -90,7 +100,7 @@ def stage(request):
             else:
                 # Move to next phase or finish
                 if testrun.current_phase == 'preparation':
-                    testrun.current_phase = 'experiment'
+                    testrun.current_phase = 'trial'
                     testrun.current_stage_index = 0
                     testrun.experiment_prompt_index = 0
                 elif testrun.current_phase == 'evaluation':
@@ -98,8 +108,8 @@ def stage(request):
             testrun.save()
             stages = get_all_stages_for_phase(test_def, testrun.current_phase)
 
-    # Get the current stage and prompt for experiment phase
-    if testrun.current_phase == 'experiment' and prompts:
+    # Get the current stage and prompt for trial and main test phases
+    if testrun.current_phase in ['trial', 'main'] and prompts:
         total_stages = len(stages)
         total_prompts = len(prompts)
         flat_index = testrun.experiment_prompt_index
