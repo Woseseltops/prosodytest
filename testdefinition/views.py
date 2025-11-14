@@ -130,7 +130,7 @@ def process_user_data(post_data, testrun):
         prompt_text = post_data.get('prompt', '')
 
         # Create Recording entry first
-        recording_entry = Recording.objects.create(file_path='', prompt=prompt_text)
+        recording_entry = Recording.objects.create(file_path='', prompt=prompt_text, testrun=testrun)
         filename = f"audio/{testrun.id}_{recording_entry.pk}.wav"
         with open(filename, "wb") as f:
             f.write(audio_bytes)
@@ -140,7 +140,7 @@ def process_user_data(post_data, testrun):
         recording_entry.save()
 
         # Link to TestRun
-        testrun.recording.add(recording_entry)
+        testrun.recordings.add(recording_entry)
 
     elif post_data.get('user_data'):
         participant_name = post_data.get('participant_name', 'Anonymous')

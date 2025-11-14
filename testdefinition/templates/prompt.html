@@ -8,5 +8,8 @@
   {% csrf_token %}
   <input type="hidden" name="stage" value="{{ stage.id|default_if_none:'' }}">
   <input type="hidden" id="audio-data" name="audio_data" />
+  {% if prompt %}
+    <input type="hidden" name="prompt" value="{{ prompt|escapejs }}" />
+  {% endif %}
   <button type="submit">Next Stage</button>
 </form>
