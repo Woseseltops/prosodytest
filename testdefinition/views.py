@@ -130,7 +130,14 @@ def stage(request):
     if not stage_obj or not stage_obj.template:
         return render(request, 'testdefinition/no_template.html')
 
-    return render(request, stage_obj.template, {'stage': stage_obj, 'testrun': testrun, 'prompt': current_prompt})
+    # If using context.html or context_prompt.html, split prompt by '|'
+    if stage_obj.template in ['context.html', 'context_prompt.html'] and current_prompt:
+        return render(request, stage_obj.template, {'stage': stage_obj, 'testrun': testrun,'context': current_prompt.split('|')[0].strip()})
+    # If using prompt.html, only show the part after the first |
+    elif stage_obj.template == 'prompt.html' and current_prompt:
+        return render(request, stage_obj.template, {'stage': stage_obj, 'testrun': testrun, 'prompt': current_prompt.split('|')[1].strip()})
+    else:
+        return render(request, stage_obj.template, {'stage': stage_obj, 'testrun': testrun, 'prompt': current_prompt})
 
 def process_user_data(post_data, testrun):
 
@@ -154,5 +161,9 @@ def process_user_data(post_data, testrun):
 
     elif post_data.get('user_data'):
         participant_name = post_data.get('participant_name', 'Anonymous')
+        l1_text = post_data.get('l1', '')
+        country_text = post_data.get('country', '')
         testrun.participant_name = participant_name
+        testrun.l1 = l1_text
+        testrun.country = country_text
         testrun.save()

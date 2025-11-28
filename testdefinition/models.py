@@ -79,7 +79,6 @@ class EvaluationPhaseStage(models.Model):
 
 
 class ProsodyTestDefinition(models.Model):
-    l1 = models.ForeignKey(Language, related_name='prosodytest_l1', on_delete=models.CASCADE)
     l2 = models.ForeignKey(Language, related_name='prosodytest_l2', on_delete=models.CASCADE)
     preparation_phase = models.ManyToManyField(TestStage, through='PreparationPhaseStage', related_name='preparation_phase')
     trial_test_phase = models.ManyToManyField(TestStage, through='TrialTestPhaseStage', related_name='trial_test_phase')
@@ -89,17 +88,20 @@ class ProsodyTestDefinition(models.Model):
     trial_prompts = models.TextField(help_text='Prompts for the trial/field test (one per line)', blank=True, null=True)
 
     def __str__(self):
-        return f"Prosody Test: {self.l1} - {self.l2}"
+        return f"Prosody Test: {self.l2}"
 
 class TestRun(models.Model):
     PHASE_CHOICES = [
         ('preparation', 'Preparation'),
-        ('experiment', 'Experiment'),
+        ('trial', 'Trial'),
+        ('main', 'Main'),
         ('evaluation', 'Evaluation'),
     ]
 
     consent = models.BooleanField()
     participant_name = models.CharField(max_length=100)
+    l1 = models.CharField(max_length=100, blank=True, null=True)
+    country = models.CharField(max_length=100, blank=True, null=True)
     current_phase = models.CharField(max_length=20, choices=PHASE_CHOICES)
     current_stage_index = models.IntegerField()
     time = models.DateTimeField(auto_now_add=True)
@@ -107,4 +109,4 @@ class TestRun(models.Model):
     experiment_prompt_index = models.IntegerField(default=0)
 
     def __str__(self):
-        return f"Run {self.pk}: {self.participant_name} ({self.current_phase}, stage {self.current_stage_index})"
+        return f"Run {self.pk}: {self.participant_name}"

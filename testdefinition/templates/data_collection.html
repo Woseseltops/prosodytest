@@ -4,6 +4,12 @@
   {% csrf_token %}
     <label for="participant_name">Name:</label>
     <input type="text" id="participant_name" name="participant_name" required>
+
+    <label for="l1">Native Language (L1):</label>
+    <input type="text" id="l1" name="l1" required>
+
+    <label for="country">Country:</label>
+    <input type="text" id="country" name="country" required>
   <input type="hidden" name="stage" value="{{ stage.id|default_if_none:'' }}">
   <input type="hidden" name="user_data" value="true">
   <button type="submit">Next Stage</button>

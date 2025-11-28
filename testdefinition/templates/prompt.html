@@ -1,6 +1,8 @@
 <!-- Prompt template -->
 <h1>Prompt</h1>
+
 <p>{{ prompt }}</p>
+<div style="color: #d32f2f; font-weight: bold; margin: 20px 0; text-align: center;">Now recording, hit spacebar when you're done.</div>
 
 {% include "recording_controls.html" with playback=False %}
 
@@ -11,5 +13,4 @@
   {% if prompt %}
     <input type="hidden" name="prompt" value="{{ prompt|escapejs }}" />
   {% endif %}
-  <button type="submit">Next Stage</button>
 </form>

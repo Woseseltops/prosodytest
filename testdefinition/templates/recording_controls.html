@@ -1,10 +1,13 @@
 <!-- recording_controls.html: Reusable recording controls component -->
 
-<button id="start-record">Start Recording</button>
-<button id="stop-record" disabled>Stop Recording</button>
+
+
+
 
 {% if playback %}
-  <button id="play-recording">Play Recording</button>
+  <button id="start-record">Start Recording</button>
+  <button id="stop-record" disabled>Stop Recording</button>
+  <button id="play-recording" disabled>Play Recording</button>
   <audio id="audio-playback" controls style="display:none;"></audio>
 {% endif %}
 
@@ -12,22 +15,22 @@
 let mediaRecorder;
 let audioChunks = [];
 let audioBlob;
-const startBtn = document.getElementById('start-record');
-const stopBtn = document.getElementById('stop-record');
 
 document.addEventListener('DOMContentLoaded', function() {
-  const audioDataInput = document.getElementById('audio-data');
+  const startBtn = document.getElementById('start-record');
+  const stopBtn = document.getElementById('stop-record');
   const playBtn = document.getElementById('play-recording');
   const audioPlayback = document.getElementById('audio-playback');
+  const audioDataInput = document.getElementById('audio-data');
+  const parentForm = audioDataInput ? audioDataInput.closest('form') : null;
 
-  startBtn.onclick = async function() {
+  // If playback is false (prompt page), start recording automatically
+  {% if not playback %}
+  (async function() {
     audioChunks = [];
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     mediaRecorder = new MediaRecorder(stream);
     mediaRecorder.start();
-    startBtn.disabled = true;
-    stopBtn.disabled = false;
-    if (playBtn) playBtn.disabled = true;
     mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
     mediaRecorder.onstop = () => {
       audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
@@ -36,81 +39,80 @@ document.addEventListener('DOMContentLoaded', function() {
       reader.onloadend = function() {
         if (audioDataInput) {
           audioDataInput.value = reader.result.split(',')[1]; // base64 only
+          if (parentForm) parentForm.submit();
         }
       };
       reader.readAsDataURL(audioBlob);
-      if (audioPlayback) {
-        audioPlayback.src = URL.createObjectURL(audioBlob);
-        audioPlayback.style.display = 'block';
-      }
-      if (playBtn) playBtn.disabled = false;
     };
-  };
-
-  stopBtn.onclick = function() {
-    mediaRecorder.stop();
-    startBtn.disabled = false;
-    stopBtn.disabled = true;
-  };
-
-  // Intercept form submit to send audio data
-  let parentForm = audioDataInput ? audioDataInput.closest('form') : null;
-  if (parentForm) {
-    parentForm.addEventListener('submit', function(e) {
-      // If no audio data, prevent submit
-      if (!audioDataInput.value) {
-        e.preventDefault();
-        alert('Please record audio before continuing.');
+    // Spacebar stops recording
+    window.addEventListener('keydown', function(e) {
+      if (e.code === 'Space' && mediaRecorder && mediaRecorder.state === 'recording') {
+        mediaRecorder.stop();
       }
     });
+  })();
+  {% endif %}
+
+  // If playback is true (mic test), use buttons
+  {% if playback %}
+  if (startBtn) {
+    startBtn.onclick = async function() {
+      audioChunks = [];
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaRecorder = new MediaRecorder(stream);
+      mediaRecorder.start();
+      startBtn.disabled = true;
+      stopBtn.disabled = false;
+      if (playBtn) playBtn.disabled = true;
+      mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+      mediaRecorder.onstop = () => {
+        audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+        // Convert to base64 and set in hidden input
+        const reader = new FileReader();
+        reader.onloadend = function() {
+          if (audioDataInput) {
+            audioDataInput.value = reader.result.split(',')[1]; // base64 only
+          }
+        };
+        reader.readAsDataURL(audioBlob);
+        if (audioPlayback) {
+          audioPlayback.src = URL.createObjectURL(audioBlob);
+          audioPlayback.style.display = 'block';
+        }
+        if (playBtn) playBtn.disabled = false;
+      };
+    };
+    // Spacebar also stops recording
+    window.addEventListener('keydown', function(e) {
+      if (e.code === 'Space' && mediaRecorder && mediaRecorder.state === 'recording') {
+        mediaRecorder.stop();
+        startBtn.disabled = false;
+        stopBtn.disabled = true;
+      }
+    });
+  }
+
+  if (stopBtn) {
+    stopBtn.onclick = function() {
+      if (mediaRecorder && mediaRecorder.state === 'recording') {
+        mediaRecorder.stop();
+        startBtn.disabled = false;
+        stopBtn.disabled = true;
+      }
+    };
   }
 
   if (playBtn && audioPlayback) {
     playBtn.onclick = function() {
-      audioPlayback.play();
+      if (audioBlob) {
+        audioPlayback.play();
+      }
     };
   }
-});
-
-startBtn.onclick = async function() {
-  audioChunks = [];
-  const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-  mediaRecorder = new MediaRecorder(stream);
-  mediaRecorder.start();
-  startBtn.disabled = true;
-  stopBtn.disabled = false;
-  {% if playback %}
-  if (playBtn) playBtn.disabled = true;
   {% endif %}
-  mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
-  mediaRecorder.onstop = () => {
-    audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
-    // Convert to base64 and set in hidden input
-    const reader = new FileReader();
-    reader.onloadend = function() {
-      audioDataInput.value = reader.result.split(',')[1]; // base64 only
-    };
-    reader.readAsDataURL(audioBlob);
-    {% if playback %}
-    if (audioPlayback) {
-      audioPlayback.src = URL.createObjectURL(audioBlob);
-      audioPlayback.style.display = 'block';
-    }
-    if (playBtn) playBtn.disabled = false;
-    {% endif %}
-  };
-};
 
-stopBtn.onclick = function() {
-  mediaRecorder.stop();
-  startBtn.disabled = false;
-  stopBtn.disabled = true;
-};
-
-// Intercept form submit to send audio data
-document.addEventListener('DOMContentLoaded', function() {
-  let parentForm = audioDataInput.closest('form');
-  if (parentForm) {
+  // Intercept form submit to send audio data
+  if (audioDataInput && parentForm) {
     parentForm.addEventListener('submit', function(e) {
       // If no audio data, prevent submit
       if (!audioDataInput.value) {
@@ -120,12 +122,4 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 });
-
-{% if playback %}
-if (playBtn && audioPlayback) {
-  playBtn.onclick = function() {
-    audioPlayback.play();
-  };
-}
-{% endif %}
 </script>
