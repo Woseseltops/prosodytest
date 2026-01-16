@@ -29,6 +29,6 @@ admin.site.register(TestStage)
 admin.site.register(Recording)
 admin.site.register(ProsodyTestDefinition, ProsodyTestDefinitionAdmin)
 class TestRunAdmin(admin.ModelAdmin):
-    list_display = ('id', 'participant_name', 'current_phase', 'current_stage_index', 'time', 'used_test_definition')
+    list_display = ('id', 'current_phase', 'current_stage_index', 'time', 'used_test_definition')
 
 admin.site.register(TestRun, TestRunAdmin)

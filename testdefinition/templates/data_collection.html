@@ -2,9 +2,6 @@
 <h1>Participant Information</h1>
 <form method="post" action="/?run={{ testrun.id }}">
   {% csrf_token %}
-    <label for="participant_name">Name:</label>
-    <input type="text" id="participant_name" name="participant_name" required>
-
     <label for="l1">Native Language (L1):</label>
     <input type="text" id="l1" name="l1" required>
 

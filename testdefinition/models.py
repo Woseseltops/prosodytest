@@ -99,7 +99,6 @@ class TestRun(models.Model):
     ]
 
     consent = models.BooleanField()
-    participant_name = models.CharField(max_length=100)
     l1 = models.CharField(max_length=100, blank=True, null=True)
     country = models.CharField(max_length=100, blank=True, null=True)
     current_phase = models.CharField(max_length=20, choices=PHASE_CHOICES)

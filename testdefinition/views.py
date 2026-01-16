@@ -32,7 +32,6 @@ def stage(request):
     if not testrun_id:
         testrun = TestRun.objects.create(
             consent=False,
-            participant_name="Anonymous",
             current_phase='preparation',
             current_stage_index=0,
             used_test_definition=test_def,
@@ -49,7 +48,6 @@ def stage(request):
         except TestRun.DoesNotExist:
             testrun = TestRun.objects.create(
                 consent=False,
-                participant_name="Anonymous",
                 current_phase='preparation',
                 current_stage_index=0,
                 used_test_definition=test_def,
@@ -160,10 +158,8 @@ def process_user_data(post_data, testrun):
         testrun.recordings.add(recording_entry)
 
     elif post_data.get('user_data'):
-        participant_name = post_data.get('participant_name', 'Anonymous')
         l1_text = post_data.get('l1', '')
         country_text = post_data.get('country', '')
-        testrun.participant_name = participant_name
         testrun.l1 = l1_text
         testrun.country = country_text
         testrun.save()
