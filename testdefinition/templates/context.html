@@ -1,17 +1,8 @@
 <h1>Context</h1>
 <p>{{ context }}</p>
-<p>Hit space when ready</p>
 
-<form id="context-form" method="post" action="/?run={{ testrun.id }}">
+<form method="post" action="/?run={{ testrun.id }}">
   {% csrf_token %}
   <input type="hidden" name="stage" value="{{ stage.id|default_if_none:'' }}">
+  <button type="submit">Ready</button>
 </form>
-
-<script>
-// Spacebar submits the form
-window.addEventListener('keydown', function(e) {
-  if (e.code === 'Space') {
-    document.getElementById('context-form').submit();
-  }
-});
-</script>

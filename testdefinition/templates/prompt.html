@@ -2,9 +2,8 @@
 <h1>Prompt</h1>
 
 <p>{{ prompt }}</p>
-<div style="color: #d32f2f; font-weight: bold; margin: 20px 0; text-align: center;">Now recording, hit spacebar when you're done.</div>
 
-{% include "recording_controls.html" with playback=False %}
+{% include "recording_controls.html" with playback=True %}
 
 <form method="post" action="/?run={{ testrun.id }}">
   {% csrf_token %}
@@ -13,4 +12,6 @@
   {% if prompt %}
     <input type="hidden" name="prompt" value="{{ prompt|escapejs }}" />
   {% endif %}
+
+  <button type="submit">Next</button>
 </form>
