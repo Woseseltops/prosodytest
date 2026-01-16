@@ -1,15 +1,25 @@
 <!-- recording_controls.html: Reusable recording controls component -->
 
-
-
-
-
-{% if playback %}
-  <button id="start-record">Start Recording</button>
-  <button id="stop-record" disabled>Stop Recording</button>
-  <button id="play-recording" disabled>Play Recording</button>
-  <audio id="audio-playback" controls style="display:none;"></audio>
+{% if timed_recording %}
+  <div style="width:100%;text-align:center;margin-top:10px;">
+    <span id="countdown-box"> 
+      <span id="countdown-number"></span>
+    </span>
+  </div>
+  <div id="time-bar-container" style="width:100%;background:#eee;height:20px;border-radius:10px;margin:20px 0;">
+    <div id="time-bar" style="width:100%;height:100%;background:#388e3c;border-radius:10px;transition:width 0.1s;"></div>
+  </div>
+  <button id="start-record-timed" type="button">Start Recording</button>
+  <button id="stop-record" type="button" disabled>Stop Recording</button>
+{% else %}
+  {% if playback %}
+    <button id="start-record">Start Recording</button>
+    <button id="stop-record" disabled>Stop Recording</button>
+  {% endif %}
 {% endif %}
+
+<button id="play-recording" disabled>Play Recording</button>
+<audio id="audio-playback" controls style="display:none;"></audio>
 
 <script>
 let mediaRecorder;
@@ -18,40 +28,112 @@ let audioBlob;
 
 document.addEventListener('DOMContentLoaded', function() {
   const startBtn = document.getElementById('start-record');
+  const startBtnTimed = document.getElementById('start-record-timed');
   const stopBtn = document.getElementById('stop-record');
   const playBtn = document.getElementById('play-recording');
   const audioPlayback = document.getElementById('audio-playback');
   const audioDataInput = document.getElementById('audio-data');
   const parentForm = audioDataInput ? audioDataInput.closest('form') : null;
 
-  // If playback is false (prompt page), start recording automatically
-  {% if not playback %}
-  (async function() {
-    audioChunks = [];
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    mediaRecorder = new MediaRecorder(stream);
-    mediaRecorder.start();
-    mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
-    mediaRecorder.onstop = () => {
-      audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
-      // Convert to base64 and set in hidden input
-      const reader = new FileReader();
-      reader.onloadend = function() {
-        if (audioDataInput) {
-          audioDataInput.value = reader.result.split(',')[1]; // base64 only
-          if (parentForm) parentForm.submit();
-        }
-      };
-      reader.readAsDataURL(audioBlob);
+  // If timed_recording is true, start recording and time bar only after 'Start Recording' is clicked
+  {% if timed_recording %}
+  if (startBtnTimed) {
+
+    startBtnTimed.onclick = async function() {
+      // Show countdown overlay
+      const countdownBox = document.getElementById('countdown-box');
+      const countdownNumber = document.getElementById('countdown-number');
+      let countdown = 3;
+      if (countdownBox && countdownNumber) {
+        countdownBox.style.display = 'inline-block';
+        countdownNumber.textContent = countdown;
+        startBtnTimed.disabled = true;
+        if (stopBtn) stopBtn.disabled = true;
+        const countdownInterval = setInterval(() => {
+          countdown--;
+          if (countdown > 0) {
+            countdownNumber.textContent = countdown;
+          } else {
+            clearInterval(countdownInterval);
+            countdownBox.style.display = 'none';
+            // Start recording after countdown
+            beginTimedRecording();
+          }
+        }, 1000);
+      } else {
+        // Fallback: start immediately if box not found
+        beginTimedRecording();
+      }
     };
 
-    // Ab  
-
-
-  })();
+    function beginTimedRecording() {
+      audioChunks = [];
+      navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+        mediaRecorder = new MediaRecorder(stream);
+        mediaRecorder.start();
+        startBtnTimed.disabled = true;
+        if (stopBtn) stopBtn.disabled = false;
+        let duration = 5; // seconds
+        let elapsed = 0;
+        const timeBar = document.getElementById('time-bar');
+        if (timeBar) {
+          timeBar.style.width = '100%';
+          timeBar.style.background = '#388e3c';
+        }
+        const interval = setInterval(function() {
+          elapsed += 0.1;
+          if (timeBar) {
+            let percent = Math.max(0, 100 - (elapsed/duration)*100);
+            timeBar.style.width = percent + '%';
+          }
+          if (elapsed >= duration) {
+            clearInterval(interval);
+            if (mediaRecorder && mediaRecorder.state === 'recording') {
+              mediaRecorder.stop();
+            }
+          }
+        }, 100);
+        mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+        mediaRecorder.onstop = () => {
+          clearInterval(interval);
+          audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+          // Convert to base64 and set in hidden input
+          const reader = new FileReader();
+          reader.onloadend = function() {
+            if (audioDataInput) {
+              audioDataInput.value = reader.result.split(',')[1]; // base64 only
+              // Do not submit the form automatically; user must click 'Next'
+            }
+          };
+          reader.readAsDataURL(audioBlob);
+          if (timeBar) {
+            timeBar.style.width = '0%';
+            timeBar.style.background = '#eee';
+          }
+          // Enable playback button and set audio
+          if (playBtn) {
+            playBtn.disabled = false;
+          }
+          if (audioPlayback && audioBlob) {
+            audioPlayback.src = URL.createObjectURL(audioBlob);
+            audioPlayback.style.display = 'block';
+          }
+        };
+        if (stopBtn) {
+          stopBtn.onclick = function() {
+            clearInterval(interval);
+            if (mediaRecorder && mediaRecorder.state === 'recording') {
+              mediaRecorder.stop();
+              startBtnTimed.disabled = false;
+              stopBtn.disabled = true;
+            }
+          };
+        }
+      });
+    }
+  }
   {% endif %}
 
-  // If playback is true (mic test), use buttons
   {% if playback %}
   if (startBtn) {
     startBtn.onclick = async function() {
@@ -80,14 +162,6 @@ document.addEventListener('DOMContentLoaded', function() {
         if (playBtn) playBtn.disabled = false;
       };
     };
-    // Spacebar also stops recording
-    window.addEventListener('keydown', function(e) {
-      if (e.code === 'Space' && mediaRecorder && mediaRecorder.state === 'recording') {
-        mediaRecorder.stop();
-        startBtn.disabled = false;
-        stopBtn.disabled = true;
-      }
-    });
   }
 
   if (stopBtn) {

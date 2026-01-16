@@ -3,7 +3,7 @@
 
 <p>{{ prompt }}</p>
 
-{% include "recording_controls.html" with playback=True %}
+{% include "recording_controls.html" with playback=True timed_recording=True %}
 
 <form method="post" action="/?run={{ testrun.id }}">
   {% csrf_token %}
