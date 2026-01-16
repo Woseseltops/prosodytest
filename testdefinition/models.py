@@ -1,3 +1,4 @@
+import random
 from django.db import models
 
 class Language(models.Model):
@@ -106,6 +107,17 @@ class TestRun(models.Model):
     time = models.DateTimeField(auto_now_add=True)
     used_test_definition = models.ForeignKey('ProsodyTestDefinition', null=True, blank=True, on_delete=models.SET_NULL, related_name='runs')
     experiment_trial_index = models.IntegerField(default=0)
+    main_trial_order = models.TextField(blank=True, null=True)
+
+
+    def save(self, *args, **kwargs):
+        # Only fill main_trial_order if not set
+        if not self.main_trial_order and self.used_test_definition and self.used_test_definition.main_trials:
+            trials = [t.strip() for t in self.used_test_definition.main_trials.split('\n') if t.strip()]
+            order = list(range(len(trials)))
+            random.shuffle(order)
+            self.main_trial_order = ','.join(str(i) for i in order)
+        super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"Run {self.pk}: {self.participant_name}"
+        return f"Run {self.pk}: {getattr(self, 'participant_name', '')}"

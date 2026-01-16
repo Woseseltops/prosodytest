@@ -68,6 +68,14 @@ def stage(request):
         trials = [p.strip() for p in (test_def.practise_trials or '').split('\n') if p.strip()]
     elif testrun.current_phase == 'main':
         trials = [p.strip() for p in (test_def.main_trials or '').split('\n') if p.strip()]
+        # Reorder trials according to main_trial_order if available
+        if testrun.main_trial_order:
+            try:
+                order = [int(i) for i in testrun.main_trial_order.split(',') if i.strip()]
+                if len(order) == len(trials):
+                    trials = [trials[i] for i in order]
+            except Exception as e:
+                pass  # fallback to original order if any error
 
     if request.method == 'POST':
         if testrun.current_phase in ['practise', 'main'] and trials:
