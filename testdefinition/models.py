@@ -15,7 +15,7 @@ class TestStage(models.Model):
 
 class Recording(models.Model):
     file_path = models.CharField(max_length=255)
-    prompt = models.TextField()
+    trial = models.TextField()
     testrun = models.ForeignKey('TestRun', on_delete=models.CASCADE, related_name='recordings')
 
     def __str__(self):
@@ -29,7 +29,7 @@ class PreparationPhaseStage(models.Model):
     def __str__(self):
         return f"{self.stage} (Order: {self.order})"
 
-class TrialTestPhaseStage(models.Model):
+class PractiseTestPhaseStage(models.Model):
     prosody_test = models.ForeignKey('ProsodyTestDefinition', on_delete=models.CASCADE)
     stage = models.ForeignKey(TestStage, on_delete=models.CASCADE)
     order = models.PositiveIntegerField(default=0)
@@ -81,11 +81,11 @@ class EvaluationPhaseStage(models.Model):
 class ProsodyTestDefinition(models.Model):
     l2 = models.ForeignKey(Language, related_name='prosodytest_l2', on_delete=models.CASCADE)
     preparation_phase = models.ManyToManyField(TestStage, through='PreparationPhaseStage', related_name='preparation_phase')
-    trial_test_phase = models.ManyToManyField(TestStage, through='TrialTestPhaseStage', related_name='trial_test_phase')
+    practise_test_phase = models.ManyToManyField(TestStage, through='PractiseTestPhaseStage', related_name='practise_test_phase')
     main_test_phase = models.ManyToManyField(TestStage, through='MainTestPhaseStage', related_name='main_test_phase')
     evaluation_phase = models.ManyToManyField(TestStage, through='EvaluationPhaseStage', related_name='evaluation_phase')
-    target_prompts = models.TextField(help_text='Prompts for the main test (one per line)', blank=True, null=True)
-    trial_prompts = models.TextField(help_text='Prompts for the trial/field test (one per line)', blank=True, null=True)
+    main_trials = models.TextField(help_text='Trials for the main test (one per line), separate context and prompt with |', blank=True, null=True)
+    practise_trials = models.TextField(help_text='Trials for the practise test (one per line), separate context and prompt with |', blank=True, null=True)
 
     def __str__(self):
         return f"Prosody Test: {self.l2}"
@@ -93,7 +93,7 @@ class ProsodyTestDefinition(models.Model):
 class TestRun(models.Model):
     PHASE_CHOICES = [
         ('preparation', 'Preparation'),
-        ('trial', 'Trial'),
+        ('practise', 'Practise'),
         ('main', 'Main'),
         ('evaluation', 'Evaluation'),
     ]
@@ -106,7 +106,7 @@ class TestRun(models.Model):
     current_stage_index = models.IntegerField()
     time = models.DateTimeField(auto_now_add=True)
     used_test_definition = models.ForeignKey('ProsodyTestDefinition', null=True, blank=True, on_delete=models.SET_NULL, related_name='runs')
-    experiment_prompt_index = models.IntegerField(default=0)
+    experiment_trial_index = models.IntegerField(default=0)
 
     def __str__(self):
         return f"Run {self.pk}: {self.participant_name}"

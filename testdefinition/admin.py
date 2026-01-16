@@ -1,7 +1,7 @@
 from django.contrib import admin
-from .models import Language, TestStage, Recording, ProsodyTestDefinition, TestRun, PreparationPhaseStage, TrialTestPhaseStage, MainTestPhaseStage, EvaluationPhaseStage
-class TrialTestPhaseStageInline(admin.TabularInline):
-    model = TrialTestPhaseStage
+from .models import Language, TestStage, Recording, ProsodyTestDefinition, TestRun, PreparationPhaseStage, PractiseTestPhaseStage, MainTestPhaseStage, EvaluationPhaseStage
+class PractiseTestPhaseStageInline(admin.TabularInline):
+    model = PractiseTestPhaseStage
     extra = 1
     ordering = ['order']
 
@@ -22,7 +22,7 @@ class EvaluationPhaseStageInline(admin.TabularInline):
     ordering = ['order']
 
 class ProsodyTestDefinitionAdmin(admin.ModelAdmin):
-    inlines = [PreparationPhaseStageInline, TrialTestPhaseStageInline, MainTestPhaseStageInline, EvaluationPhaseStageInline]
+    inlines = [PreparationPhaseStageInline, PractiseTestPhaseStageInline, MainTestPhaseStageInline, EvaluationPhaseStageInline]
 
 admin.site.register(Language)
 admin.site.register(TestStage)
