@@ -8,12 +8,70 @@
     <form method="post" action="/?run={{ testrun.id }}">
       {% csrf_token %}
       <div class="mb-3">
-        <label for="l1" class="form-label">Native Language (L1):</label>
-        <input type="text" id="l1" name="l1" class="form-control" required>
+        <label for="age" class="form-label">How old are you (in years)?</label>
+        <input type="number" id="age" name="age" class="form-control" min="0" max="120" required>
       </div>
       <div class="mb-3">
-        <label for="country" class="form-label">Country:</label>
-        <input type="text" id="country" name="country" class="form-control" required>
+        <label for="birth_country" class="form-label">In which country were you born?</label>
+        <input type="text" id="birth_country" name="birth_country" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label for="grew_up_country" class="form-label">In which country did you grow up?</label>
+        <input type="text" id="grew_up_country" name="grew_up_country" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Do you speak any other languages?</label><br>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="other_languages" id="other_languages_yes" value="true" required>
+          <label class="form-check-label" for="other_languages_yes">Yes</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="other_languages" id="other_languages_no" value="false">
+          <label class="form-check-label" for="other_languages_no">No</label>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="languages_list" class="form-label">Please list the languages you speak below:</label>
+        <input type="text" id="languages_list" name="languages_list" class="form-control">
+      </div>
+      <div class="mb-3">
+        <label class="form-label">What is your highest completed level of education?</label><br>
+        <select class="form-select" name="education" id="education" required>
+          <option value="">Select...</option>
+          <option value="no formal education">No formal education</option>
+          <option value="primary school">Primary school</option>
+          <option value="secondary school">Secondary school</option>
+          <option value="Technical/Community College">Technical/Community College</option>
+          <option value="University">University</option>
+          <option value="prefer not to say">Prefer not to say</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Have you ever been formally diagnosed with dyslexia?</label><br>
+        <select class="form-select" name="dyslexia" id="dyslexia" required>
+          <option value="">Select...</option>
+          <option value="yes">Yes</option>
+          <option value="no">No</option>
+          <option value="prefer not to say">Prefer not to say</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Have you ever been formally diagnosed with autism spectrum disorder (ASD)?</label><br>
+        <select class="form-select" name="asd" id="asd" required>
+          <option value="">Select...</option>
+          <option value="yes">Yes</option>
+          <option value="no">No</option>
+          <option value="prefer not to say">Prefer not to say</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Have you ever been formally diagnosed with any learning impairment?</label><br>
+        <select class="form-select" name="learning_impairment" id="learning_impairment" required>
+          <option value="">Select...</option>
+          <option value="yes">Yes</option>
+          <option value="no">No</option>
+          <option value="prefer not to say">Prefer not to say</option>
+        </select>
       </div>
       <input type="hidden" name="stage" value="{{ stage.id|default_if_none:'' }}">
       <input type="hidden" name="user_data" value="true">

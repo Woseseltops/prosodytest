@@ -100,8 +100,28 @@ class TestRun(models.Model):
     ]
 
     consent = models.BooleanField()
-    l1 = models.CharField(max_length=100, blank=True, null=True)
-    country = models.CharField(max_length=100, blank=True, null=True)
+    age = models.PositiveIntegerField(blank=True, null=True)
+    birth_country = models.CharField(max_length=100, blank=True, null=True)
+    grew_up_country = models.CharField(max_length=100, blank=True, null=True)
+    other_languages = models.BooleanField(blank=True, null=True)
+    languages_list = models.CharField(max_length=255, blank=True, null=True)
+    EDUCATION_CHOICES = [
+        ('no formal education', 'No formal education'),
+        ('primary school', 'Primary school'),
+        ('secondary school', 'Secondary school'),
+        ('Technical/Community College', 'Technical/Community College'),
+        ('University', 'University'),
+        ('prefer not to say', 'Prefer not to say'),
+    ]
+    education = models.CharField(max_length=50, choices=EDUCATION_CHOICES, blank=True, null=True)
+    YES_NO_PREFER_CHOICES = [
+        ('yes', 'Yes'),
+        ('no', 'No'),
+        ('prefer not to say', 'Prefer not to say'),
+    ]
+    dyslexia = models.CharField(max_length=20, choices=YES_NO_PREFER_CHOICES, blank=True, null=True)
+    asd = models.CharField(max_length=20, choices=YES_NO_PREFER_CHOICES, blank=True, null=True)
+    learning_impairment = models.CharField(max_length=20, choices=YES_NO_PREFER_CHOICES, blank=True, null=True)
     current_phase = models.CharField(max_length=20, choices=PHASE_CHOICES)
     current_stage_index = models.IntegerField()
     time = models.DateTimeField(auto_now_add=True)

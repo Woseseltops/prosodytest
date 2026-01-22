@@ -166,8 +166,13 @@ def process_user_data(post_data, testrun):
         testrun.recordings.add(recording_entry)
 
     elif post_data.get('user_data'):
-        l1_text = post_data.get('l1', '')
-        country_text = post_data.get('country', '')
-        testrun.l1 = l1_text
-        testrun.country = country_text
+        testrun.age = post_data.get('age') or None
+        testrun.birth_country = post_data.get('birth_country', '')
+        testrun.grew_up_country = post_data.get('grew_up_country', '')
+        testrun.other_languages = post_data.get('other_languages') == 'true'
+        testrun.languages_list = post_data.get('languages_list', '')
+        testrun.education = post_data.get('education', '')
+        testrun.dyslexia = post_data.get('dyslexia', '')
+        testrun.asd = post_data.get('asd', '')
+        testrun.learning_impairment = post_data.get('learning_impairment', '')
         testrun.save()
