@@ -1,17 +1,30 @@
-<!-- Prompt template -->
-<h1>Prompt</h1>
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap_ru.css' %}">
 
-<p>{{ prompt }}</p>
-
-{% include "recording_controls.html" with playback=True timed_recording=True %}
-
-<form method="post" action="/?run={{ testrun.id }}">
-  {% csrf_token %}
-  <input type="hidden" name="stage" value="{{ stage.id|default_if_none:'' }}">
-  <input type="hidden" id="audio-data" name="audio_data" />
-  {% if prompt %}
-    <input type="hidden" name="prompt" value="{{ prompt|escapejs }}" />
-  {% endif %}
-
-  <button type="submit">Next</button>
-</form>
+<body>
+  <main class="container mb5">
+    <h1>{{ prompt }}</h1>
+    {% include "recording_controls.html" with playback=True timed_recording=True %}
+    <form method="post" action="/?run={{ testrun.id }}">
+      {% csrf_token %}
+      <input type="hidden" name="stage" value="{{ stage.id|default_if_none:'' }}">
+      <input type="hidden" id="audio-data" name="audio_data" />
+      {% if prompt %}
+        <input type="hidden" name="prompt" value="{{ prompt|escapejs }}" />
+      {% endif %}
+      <hr>
+      <button class="btn btn-primary" type="submit">Next</button>
+    </form>
+    <div class="mb-3 text-center">
+        <a class="flag-icon" href="?lang=en">
+            <span class="fi fi-gb fis flag-icon" title="English"></span>
+        </a>
+        <a class="flag-icon" href="?lang=nl">
+            <span class="fi fi-nl fis flag-icon" title="Nederlands"></span>
+        </a>
+        <div class="mt-4">
+            <img src="https://cls.ru.nl/RU_logo.svg" alt="Radboud Universiteit" style="height: 2rem; margin-top: 1rem;" />
+        </div>
+    </div>
+  </main>
+</body>

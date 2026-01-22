@@ -1,13 +1,34 @@
-<!-- Data Collection template -->
-<h1>Participant Information</h1>
-<form method="post" action="/?run={{ testrun.id }}">
-  {% csrf_token %}
-    <label for="l1">Native Language (L1):</label>
-    <input type="text" id="l1" name="l1" required>
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap_ru.css' %}">
 
-    <label for="country">Country:</label>
-    <input type="text" id="country" name="country" required>
-  <input type="hidden" name="stage" value="{{ stage.id|default_if_none:'' }}">
-  <input type="hidden" name="user_data" value="true">
-  <button type="submit">Next</button>
-</form>
+<body>
+  <main class="container mb5">
+    <h1>Participant Information</h1>
+    <hr>
+    <form method="post" action="/?run={{ testrun.id }}">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label for="l1" class="form-label">Native Language (L1):</label>
+        <input type="text" id="l1" name="l1" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label for="country" class="form-label">Country:</label>
+        <input type="text" id="country" name="country" class="form-control" required>
+      </div>
+      <input type="hidden" name="stage" value="{{ stage.id|default_if_none:'' }}">
+      <input type="hidden" name="user_data" value="true">
+      <button class="btn btn-primary" type="submit">Next</button>
+    </form>
+    <div class="mb-3 text-center">
+        <a class="flag-icon" href="?lang=en">
+            <span class="fi fi-gb fis flag-icon" title="English"></span>
+        </a>
+        <a class="flag-icon" href="?lang=nl">
+            <span class="fi fi-nl fis flag-icon" title="Nederlands"></span>
+        </a>
+        <div class="mt-4">
+            <img src="https://cls.ru.nl/RU_logo.svg" alt="Radboud Universiteit" style="height: 2rem; margin-top: 1rem;" />
+        </div>
+    </div>
+  </main>
+</body>

@@ -9,16 +9,16 @@
   <div id="time-bar-container" style="width:100%;background:#eee;height:20px;border-radius:10px;margin:20px 0;">
     <div id="time-bar" style="width:100%;height:100%;background:#388e3c;border-radius:10px;transition:width 0.1s;"></div>
   </div>
-  <button id="start-record-timed" type="button">Start Recording</button>
-  <button id="stop-record" type="button" disabled>Stop Recording</button>
+  <button id="start-record-timed" type="button" class="btn btn-primary">Start Recording</button>
+  <button id="stop-record" type="button" class="btn btn-primary" disabled>Stop Recording</button>
 {% else %}
   {% if playback %}
-    <button id="start-record">Start Recording</button>
-    <button id="stop-record" disabled>Stop Recording</button>
+    <button id="start-record" class="btn btn-primary">Start Recording</button>
+    <button id="stop-record" class="btn btn-primary" disabled>Stop Recording</button>
   {% endif %}
 {% endif %}
 
-<button id="play-recording" disabled>Play Recording</button>
+<button id="play-recording" class="btn btn-primary" disabled>Play Recording</button>
 <audio id="audio-playback" controls style="display:none;"></audio>
 
 <script>

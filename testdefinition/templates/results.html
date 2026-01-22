@@ -1,3 +1,21 @@
-<!-- Results template -->
-<h1>Results</h1>
-<p>Your results will be displayed here.</p>
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap_ru.css' %}">
+
+<body>
+  <main class="container mb5">
+    <h1>Results</h1>
+    <hr>
+    <p>Your results will be displayed here.</p>
+    <div class="mb-3 text-center">
+        <a class="flag-icon" href="?lang=en">
+            <span class="fi fi-gb fis flag-icon" title="English"></span>
+        </a>
+        <a class="flag-icon" href="?lang=nl">
+            <span class="fi fi-nl fis flag-icon" title="Nederlands"></span>
+        </a>
+        <div class="mt-4">
+            <img src="https://cls.ru.nl/RU_logo.svg" alt="Radboud Universiteit" style="height: 2rem; margin-top: 1rem;" />
+        </div>
+    </div>
+  </main>
+</body>
