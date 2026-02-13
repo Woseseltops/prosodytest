@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = '/var/www/repo'
 
 
 # Quick-start development settings - unsuitable for production
@@ -25,8 +25,10 @@ SECRET_KEY = 'django-insecure-snx^+co$(1h@h=4uaxg6161^(gh$d)zwfva54(i7*i*=-fsnh&
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['prosodytest-dev.cls.ru.nl','prosodytest.cls.ru.nl']
+CSRF_TRUSTED_ORIGINS = [
+    'https://prosodytest-dev.cls.ru.nl',
+]
 
 # Application definition
 
@@ -76,7 +78,7 @@ WSGI_APPLICATION = 'prosodytest.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': '/var/www/writable/database/db.sqlite3',
     }
 }
 
@@ -116,9 +118,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [BASE_DIR / "static", "/var/www/static/"]
+STATICFILES_DIRS = [BASE_DIR+'/static', "/var/www/static/"]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+SECRET_KEY="wesselisdebeste"
