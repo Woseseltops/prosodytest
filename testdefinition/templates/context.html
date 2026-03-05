@@ -3,8 +3,9 @@
 
 <body>
   <main class="container mb5">
+    <div style="height:100px;"></div>
     <h1>{{ context }}</h1>
-    <hr>
+    <div style="height:100px;"></div>
     <form method="post" action="/?run={{ testrun.id }}">
       {% csrf_token %}
       <input type="hidden" name="stage" value="{{ stage.id|default_if_none:'' }}">

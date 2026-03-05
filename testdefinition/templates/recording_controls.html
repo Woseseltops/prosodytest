@@ -2,12 +2,12 @@
 
 {% if timed_recording %}
   <div style="width:100%;text-align:center;margin-top:10px;">
-    <span id="countdown-box"> 
-      <span id="countdown-number"></span>
+    <span id="countdown-box" style="display:inline-block; background:#fff; border-radius:12px; padding:20px 40px; min-width:120px; min-height:80px; text-align:center; vertical-align:middle;">
+      <span id="countdown-number" style="font-size:64px; font-weight:bold; min-width:64px; min-height:64px; display:inline-block;"></span>
     </span>
   </div>
   <div id="time-bar-container" style="width:100%;background:#eee;height:20px;border-radius:10px;margin:20px 0;">
-    <div id="time-bar" style="width:100%;height:100%;background:#388e3c;border-radius:10px;transition:width 0.1s;"></div>
+    <div id="time-bar" style="width:100%;height:100%;background:#d32f2f;border-radius:10px;transition:width 0.1s;"></div>
   </div>
   <button id="start-record-timed" type="button" class="btn btn-primary">Start Recording</button>
   <button id="stop-record" type="button" class="btn btn-primary" disabled>Stop Recording</button>
@@ -45,8 +45,8 @@ document.addEventListener('DOMContentLoaded', function() {
       const countdownNumber = document.getElementById('countdown-number');
       let countdown = 3;
       if (countdownBox && countdownNumber) {
-        countdownBox.style.display = 'inline-block';
-        countdownNumber.textContent = countdown;
+            countdownBox.style.display = 'inline-block';
+            countdownNumber.textContent = countdown;
         startBtnTimed.disabled = true;
         if (stopBtn) stopBtn.disabled = true;
         const countdownInterval = setInterval(() => {
@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function() {
             countdownNumber.textContent = countdown;
           } else {
             clearInterval(countdownInterval);
-            countdownBox.style.display = 'none';
+            countdownNumber.textContent = '';
             // Start recording after countdown
             beginTimedRecording();
           }
@@ -77,8 +77,8 @@ document.addEventListener('DOMContentLoaded', function() {
         let elapsed = 0;
         const timeBar = document.getElementById('time-bar');
         if (timeBar) {
-          timeBar.style.width = '100%';
-          timeBar.style.background = '#388e3c';
+            timeBar.style.width = '100%';
+            timeBar.style.background = '#388e3c'; // Change to green when recording starts
         }
         const interval = setInterval(function() {
           elapsed += 0.1;
