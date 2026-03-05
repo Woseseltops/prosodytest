@@ -14,10 +14,10 @@
       </div>
     </div>
 
-    <form method="post" action="/?run={{ testrun.id }}">
+    <form method="post" action="/?run={{ testrun.id }}" id="mic-test-form">
       {% csrf_token %}
       <input type="hidden" name="stage" value="{{ stage.id|default_if_none:'' }}">
-      <button class="btn btn-primary" type="submit">Next</button>
+      <button class="btn btn-primary" type="submit" id="next-btn" style="display:none;">Next</button>
     </form>
 
     <div class="mb-3 text-center">
@@ -40,9 +40,14 @@ let analyser;
 let source;
 let volumeAnimation;
 const volumeBar = document.getElementById('volume-bar');
+const nextBtn = document.getElementById('next-btn');
+let playPressed = false;
 
-function updateVolume() 
-{
+function showNextButton() {
+  nextBtn.style.display = '';
+}
+
+function updateVolume() {
   if (analyser) {
     const dataArray = new Uint8Array(analyser.fftSize);
     analyser.getByteTimeDomainData(dataArray);
@@ -56,16 +61,49 @@ function updateVolume()
   volumeAnimation = requestAnimationFrame(updateVolume);
 }
 
-async function startVolumeMeter() 
-{
-  const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-  audioContext = new (window.AudioContext || window.webkitAudioContext)();
-  source = audioContext.createMediaStreamSource(stream);
-  analyser = audioContext.createAnalyser();
-  analyser.fftSize = 256;
-  source.connect(analyser);
-  updateVolume();
+async function startVolumeMeter() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    source = audioContext.createMediaStreamSource(stream);
+    analyser = audioContext.createAnalyser();
+    analyser.fftSize = 256;
+    source.connect(analyser);
+    updateVolume();
+  } catch (err) {
+    alert('Microphone access is required to continue.');
+  }
 }
+
+// Wait for DOM to be ready to attach event listener
+document.addEventListener('DOMContentLoaded', function() {
+  // Try to find the play button inside the included recording_controls.html
+  // Assume the play button has a recognizable id or class, e.g. 'play-recording' or similar
+  // If not, use a selector for a button with a title or aria-label containing 'play'
+  let playBtn = document.querySelector('button[title*="play" i], button[aria-label*="play" i], .play-recording, .btn-play');
+  if (!playBtn) {
+    // Try to find by text content as fallback
+    playBtn = Array.from(document.querySelectorAll('button')).find(btn => btn.textContent.trim().toLowerCase().includes('play'));
+  }
+  if (playBtn) {
+    playBtn.addEventListener('click', function() {
+      if (!playPressed) {
+        playPressed = true;
+        showNextButton();
+      }
+    });
+  }
+  // Also listen for play events on audio elements (e.g., <audio> tag)
+  const audioEls = document.querySelectorAll('audio');
+  audioEls.forEach(function(audio) {
+    audio.addEventListener('play', function() {
+      if (!playPressed) {
+        playPressed = true;
+        showNextButton();
+      }
+    });
+  });
+});
 
 startVolumeMeter();
 </script>
