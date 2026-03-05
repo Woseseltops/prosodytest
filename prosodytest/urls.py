@@ -29,5 +29,4 @@ urlpatterns = [
 ]
 
 if settings.DEBUG:
-    print(settings.STATIC_URL, settings.BASE_DIR / 'static')
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.BASE_DIR / 'static')
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.BASE_DIR + 'static')
