@@ -38,7 +38,9 @@ def export_testruns_csv(modeladmin, request, queryset):
     writer = csv.writer(response)
     # List all fields to export
     field_names = [
-        'id', 'consent', 'age', 'birth_country', 'grew_up_country', 'other_languages', 'languages_list',
+        'id', 'consent', 'age', 'birth_country', 'grew_up_country', 'live_now_country',
+        'home_languages_growing_up', 'other_languages', 'languages_list', 'english_type',
+        'english_speaking_proficiency', 'english_reading_proficiency', 'english_writing_proficiency',
         'education', 'dyslexia', 'asd', 'learning_impairment', 'current_phase', 'current_stage_index',
         'time', 'used_test_definition', 'experiment_trial_index', 'main_trial_order'
     ]
@@ -50,8 +52,14 @@ def export_testruns_csv(modeladmin, request, queryset):
             testrun.age,
             testrun.birth_country,
             testrun.grew_up_country,
+            testrun.live_now_country,
+            testrun.home_languages_growing_up,
             testrun.other_languages,
             testrun.languages_list,
+            testrun.english_type,
+            testrun.english_speaking_proficiency,
+            testrun.english_reading_proficiency,
+            testrun.english_writing_proficiency,
             testrun.education,
             testrun.dyslexia,
             testrun.asd,
@@ -67,7 +75,7 @@ def export_testruns_csv(modeladmin, request, queryset):
 export_testruns_csv.short_description = "Export selected testruns as CSV"
 
 class TestRunAdmin(admin.ModelAdmin):
-    list_display = ('id', 'current_phase', 'current_stage_index', 'time', 'used_test_definition')
+    list_display = ('id', 'current_phase', 'current_stage_index', 'time', 'used_test_definition', 'english_type')
     actions = [export_testruns_csv]
 
 admin.site.register(TestRun, TestRunAdmin)

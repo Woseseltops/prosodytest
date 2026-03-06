@@ -20,6 +20,14 @@
         <input type="text" id="grew_up_country" name="grew_up_country" class="form-control" required>
       </div>
       <div class="mb-3">
+        <label for="live_now_country" class="form-label">In which country do you live now?</label>
+        <input type="text" id="live_now_country" name="live_now_country" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label for="home_languages_growing_up" class="form-label">What language(s) did you speak at home growing up?</label>
+        <input type="text" id="home_languages_growing_up" name="home_languages_growing_up" class="form-control" required>
+      </div>
+      <div class="mb-3">
         <label class="form-label">Do you speak any other languages?</label><br>
         <div class="form-check form-check-inline">
           <input class="form-check-input" type="radio" name="other_languages" id="other_languages_yes" value="true" required>
@@ -33,6 +41,53 @@
       <div class="mb-3">
         <label for="languages_list" class="form-label">Please list the languages you speak below:</label>
         <input type="text" id="languages_list" name="languages_list" class="form-control">
+      </div>
+      <div class="mb-3">
+        <label class="form-label">What type of English are you learning?</label><br>
+        <select class="form-select" name="english_type" id="english_type" required>
+          <option value="">Select...</option>
+          <option value="british">British</option>
+          <option value="american">American</option>
+          <option value="australian">Australian</option>
+          <option value="other">Other</option>
+          <option value="i do not know">I don't know</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">How proficient are you at speaking English?</label><br>
+        <select class="form-select" name="english_speaking_proficiency" id="english_speaking_proficiency" required>
+          <option value="">Select...</option>
+          <option value="a1 beginner">A1 beginner</option>
+          <option value="a2 beginner">A2 beginner</option>
+          <option value="b1 intermediate">B1 intermediate</option>
+          <option value="b2 intermediate">B2 intermediate</option>
+          <option value="c1 proficient">C1 proficient</option>
+          <option value="c2 proficient">C2 proficient</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">How proficient are you at reading English?</label><br>
+        <select class="form-select" name="english_reading_proficiency" id="english_reading_proficiency" required>
+          <option value="">Select...</option>
+          <option value="a1 beginner">A1 beginner</option>
+          <option value="a2 beginner">A2 beginner</option>
+          <option value="b1 intermediate">B1 intermediate</option>
+          <option value="b2 intermediate">B2 intermediate</option>
+          <option value="c1 proficient">C1 proficient</option>
+          <option value="c2 proficient">C2 proficient</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">How proficient are you at writing English?</label><br>
+        <select class="form-select" name="english_writing_proficiency" id="english_writing_proficiency" required>
+          <option value="">Select...</option>
+          <option value="a1 beginner">A1 beginner</option>
+          <option value="a2 beginner">A2 beginner</option>
+          <option value="b1 intermediate">B1 intermediate</option>
+          <option value="b2 intermediate">B2 intermediate</option>
+          <option value="c1 proficient">C1 proficient</option>
+          <option value="c2 proficient">C2 proficient</option>
+        </select>
       </div>
       <div class="mb-3">
         <label class="form-label">What is your highest completed level of education?</label><br>

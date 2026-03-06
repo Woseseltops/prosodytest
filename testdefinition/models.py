@@ -103,8 +103,29 @@ class TestRun(models.Model):
     age = models.PositiveIntegerField(blank=True, null=True)
     birth_country = models.CharField(max_length=100, blank=True, null=True)
     grew_up_country = models.CharField(max_length=100, blank=True, null=True)
+    live_now_country = models.CharField(max_length=100, blank=True, null=True)
+    home_languages_growing_up = models.CharField(max_length=255, blank=True, null=True)
     other_languages = models.BooleanField(blank=True, null=True)
     languages_list = models.CharField(max_length=255, blank=True, null=True)
+    ENGLISH_TYPE_CHOICES = [
+        ('british', 'British'),
+        ('american', 'American'),
+        ('australian', 'Australian'),
+        ('other', 'Other'),
+        ('i do not know', "I don't know"),
+    ]
+    english_type = models.CharField(max_length=20, choices=ENGLISH_TYPE_CHOICES, blank=True, null=True)
+    ENGLISH_PROFICIENCY_CHOICES = [
+        ('a1 beginner', 'A1 beginner'),
+        ('a2 beginner', 'A2 beginner'),
+        ('b1 intermediate', 'B1 intermediate'),
+        ('b2 intermediate', 'B2 intermediate'),
+        ('c1 proficient', 'C1 proficient'),
+        ('c2 proficient', 'C2 proficient'),
+    ]
+    english_speaking_proficiency = models.CharField(max_length=20, choices=ENGLISH_PROFICIENCY_CHOICES, blank=True, null=True)
+    english_reading_proficiency = models.CharField(max_length=20, choices=ENGLISH_PROFICIENCY_CHOICES, blank=True, null=True)
+    english_writing_proficiency = models.CharField(max_length=20, choices=ENGLISH_PROFICIENCY_CHOICES, blank=True, null=True)
     EDUCATION_CHOICES = [
         ('no formal education', 'No formal education'),
         ('primary school', 'Primary school'),

@@ -169,8 +169,14 @@ def process_user_data(post_data, testrun):
         testrun.age = post_data.get('age') or None
         testrun.birth_country = post_data.get('birth_country', '')
         testrun.grew_up_country = post_data.get('grew_up_country', '')
+        testrun.live_now_country = post_data.get('live_now_country', '')
+        testrun.home_languages_growing_up = post_data.get('home_languages_growing_up', '')
         testrun.other_languages = post_data.get('other_languages') == 'true'
         testrun.languages_list = post_data.get('languages_list', '')
+        testrun.english_type = post_data.get('english_type', '')
+        testrun.english_speaking_proficiency = post_data.get('english_speaking_proficiency', '')
+        testrun.english_reading_proficiency = post_data.get('english_reading_proficiency', '')
+        testrun.english_writing_proficiency = post_data.get('english_writing_proficiency', '')
         testrun.education = post_data.get('education', '')
         testrun.dyslexia = post_data.get('dyslexia', '')
         testrun.asd = post_data.get('asd', '')
