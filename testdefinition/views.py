@@ -1,5 +1,7 @@
 import base64
+from pathlib import Path
 
+from django.conf import settings
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from .models import ProsodyTestDefinition, PreparationPhaseStage, TestRun, PractiseTestPhaseStage, MainTestPhaseStage, EvaluationPhaseStage, Recording
@@ -151,15 +153,18 @@ def process_user_data(post_data, testrun):
         audio_data = post_data['audio_data']
         audio_bytes = base64.b64decode(audio_data)
         trial_text = post_data.get('trial', '')
+        audio_dir = Path(settings.AUDIO_FILES_DIR)
+        audio_dir.mkdir(parents=True, exist_ok=True)
 
         # Create Recording entry first
         recording_entry = Recording.objects.create(file_path='', trial=trial_text, testrun=testrun)
-        filename = f"audio/{testrun.id}_{recording_entry.pk}.wav"
-        with open(filename, "wb") as f:
+        relative_filename = f"audio/{testrun.id}_{recording_entry.pk}.wav"
+        output_path = audio_dir / f"{testrun.id}_{recording_entry.pk}.wav"
+        with open(output_path, "wb") as f:
             f.write(audio_bytes)
 
         # Update file_path and save
-        recording_entry.file_path = filename
+        recording_entry.file_path = relative_filename
         recording_entry.save()
 
         # Link to TestRun

@@ -119,6 +119,8 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR+'/static', "/var/www/static/"]
+# Directory where uploaded audio recordings are stored.
+AUDIO_FILES_DIR = '/var/www/writable/audio'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
