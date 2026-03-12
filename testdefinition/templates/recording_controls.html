@@ -40,6 +40,15 @@ document.addEventListener('DOMContentLoaded', function() {
   if (startBtnTimed) {
 
     startBtnTimed.onclick = async function() {
+      // Acquire the microphone NOW so the hardware warms up during the countdown, preventing the activation pop
+      let stream;
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      } catch (e) {
+        alert('Could not access microphone.');
+        return;
+      }
+
       // Show countdown overlay
       const countdownBox = document.getElementById('countdown-box');
       const countdownNumber = document.getElementById('countdown-number');
@@ -56,82 +65,78 @@ document.addEventListener('DOMContentLoaded', function() {
           } else {
             clearInterval(countdownInterval);
             countdownNumber.textContent = '';
-            // Start recording after countdown
-            beginTimedRecording();
+            // Start recording after countdown — mic has been live for ~3s already
+            beginTimedRecording(stream);
           }
         }, 1000);
       } else {
         // Fallback: start immediately if box not found
-        beginTimedRecording();
+        beginTimedRecording(stream);
       }
     };
 
-    function beginTimedRecording() {
+    function beginTimedRecording(stream) {
       audioChunks = [];
-      navigator.mediaDevices.getUserMedia({ audio: true }).then(async stream => {
-        mediaRecorder = new MediaRecorder(stream);
-        // Wait for the audio hardware to settle before recording starts, to avoid capturing the activation pop
-        await new Promise(resolve => setTimeout(resolve, 200));
-        mediaRecorder.start();
-        startBtnTimed.disabled = true;
-        if (stopBtn) stopBtn.disabled = false;
-        let duration = 5; // seconds
-        let elapsed = 0;
-        const timeBar = document.getElementById('time-bar');
+      mediaRecorder = new MediaRecorder(stream);
+      mediaRecorder.start();
+      startBtnTimed.disabled = true;
+      if (stopBtn) stopBtn.disabled = false;
+      let duration = 5; // seconds
+      let elapsed = 0;
+      const timeBar = document.getElementById('time-bar');
+      if (timeBar) {
+        timeBar.style.width = '100%';
+        timeBar.style.background = '#388e3c'; // Change to green when recording starts
+      }
+      const interval = setInterval(function() {
+        elapsed += 0.1;
         if (timeBar) {
-            timeBar.style.width = '100%';
-            timeBar.style.background = '#388e3c'; // Change to green when recording starts
+          let percent = Math.max(0, 100 - (elapsed/duration)*100);
+          timeBar.style.width = percent + '%';
         }
-        const interval = setInterval(function() {
-          elapsed += 0.1;
-          if (timeBar) {
-            let percent = Math.max(0, 100 - (elapsed/duration)*100);
-            timeBar.style.width = percent + '%';
-          }
-          if (elapsed >= duration) {
-            clearInterval(interval);
-            if (mediaRecorder && mediaRecorder.state === 'recording') {
-              mediaRecorder.stop();
-            }
-          }
-        }, 100);
-        mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
-        mediaRecorder.onstop = () => {
+        if (elapsed >= duration) {
           clearInterval(interval);
-          audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
-          // Convert to base64 and set in hidden input
-          const reader = new FileReader();
-          reader.onloadend = function() {
-            if (audioDataInput) {
-              audioDataInput.value = reader.result.split(',')[1]; // base64 only
-              // Do not submit the form automatically; user must click 'Next'
-            }
-          };
-          reader.readAsDataURL(audioBlob);
-          if (timeBar) {
-            timeBar.style.width = '0%';
-            timeBar.style.background = '#eee';
+          if (mediaRecorder && mediaRecorder.state === 'recording') {
+            mediaRecorder.stop();
           }
-          // Enable playback button and set audio
-          if (playBtn) {
-            playBtn.disabled = false;
-          }
-          if (audioPlayback && audioBlob) {
-            audioPlayback.src = URL.createObjectURL(audioBlob);
-            audioPlayback.style.display = 'block';
+        }
+      }, 100);
+      mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+      mediaRecorder.onstop = () => {
+        clearInterval(interval);
+        audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+        // Convert to base64 and set in hidden input
+        const reader = new FileReader();
+        reader.onloadend = function() {
+          if (audioDataInput) {
+            audioDataInput.value = reader.result.split(',')[1]; // base64 only
+            // Do not submit the form automatically; user must click 'Next'
           }
         };
-        if (stopBtn) {
-          stopBtn.onclick = function() {
-            clearInterval(interval);
-            if (mediaRecorder && mediaRecorder.state === 'recording') {
-              mediaRecorder.stop();
-              startBtnTimed.disabled = false;
-              stopBtn.disabled = true;
-            }
-          };
+        reader.readAsDataURL(audioBlob);
+        if (timeBar) {
+          timeBar.style.width = '0%';
+          timeBar.style.background = '#eee';
         }
-      });
+        // Enable playback button and set audio
+        if (playBtn) {
+          playBtn.disabled = false;
+        }
+        if (audioPlayback && audioBlob) {
+          audioPlayback.src = URL.createObjectURL(audioBlob);
+          audioPlayback.style.display = 'block';
+        }
+      };
+      if (stopBtn) {
+        stopBtn.onclick = function() {
+          clearInterval(interval);
+          if (mediaRecorder && mediaRecorder.state === 'recording') {
+            mediaRecorder.stop();
+            startBtnTimed.disabled = false;
+            stopBtn.disabled = true;
+          }
+        };
+      }
     }
   }
   {% endif %}
