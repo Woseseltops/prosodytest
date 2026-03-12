@@ -68,8 +68,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function beginTimedRecording() {
       audioChunks = [];
-      navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+      navigator.mediaDevices.getUserMedia({ audio: true }).then(async stream => {
         mediaRecorder = new MediaRecorder(stream);
+        // Wait for the audio hardware to settle before recording starts, to avoid capturing the activation pop
+        await new Promise(resolve => setTimeout(resolve, 200));
         mediaRecorder.start();
         startBtnTimed.disabled = true;
         if (stopBtn) stopBtn.disabled = false;
@@ -140,6 +142,8 @@ document.addEventListener('DOMContentLoaded', function() {
       audioChunks = [];
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       mediaRecorder = new MediaRecorder(stream);
+      // Wait for the audio hardware to settle before recording starts, to avoid capturing the activation pop
+      await new Promise(resolve => setTimeout(resolve, 200));
       mediaRecorder.start();
       startBtn.disabled = true;
       stopBtn.disabled = false;
