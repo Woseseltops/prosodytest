@@ -1,0 +1,68 @@
+filename;prompt;expected_transcription;category;subcategory;sub-subcategory;word-level_contrasts;indentifier;expected_word_count;expected_syllables;stress position
+1;You are in a parent-teacher meeting. Your son�s teacher says:;Noah is a bit of a rebel.;Declaratives;broad focus;1IP;lexical stress item;Decl_bf1ip_stress;7;9;1
+2;The president has just passed a new law that some people are opposed to. The newsreader announces:;Some citizens might choose to rebel.;Declaratives;broad focus;1IP;lexical stress item;Decl_bf1ip_stress;6;9;2
+3;You are cheering for your friend Laura, who is an athlete. Another friend joins you in the stands and asks what is going on. You say:;Laura set a personal record.;Declaratives;broad focus;1IP;lexical stress item;Decl_bf1ip_stress;5;9;1
+4;You are giving some instructions to your brother so he can film your graduation. You say:;Remember to press record.;Declaratives;broad focus;1IP;lexical stress item;Decl_bf1ip_stress;4;7;2
+5;Your father enters the room and sees that your sister Annie looks very happy. He asks what just happened. You say:;Annie received a present.;Declaratives;broad focus;1IP;lexical stress item;Decl_bf1ip_stress;4;7;1
+6;You are asked to present an award to the best teacher at your school. Afterwards, you say:;That award was fun to present.;Declaratives;broad focus;1IP;lexical stress item;Decl_bf_1ip_stress;6;8;2
+7;Together with a friend, you are looking up the qualities needed for different jobs. You say:;To be a journalist, you must be analytical.;Declaratives;broad focus;1IP;lexical stress item;Decl_bf_1ip_stress;9;10;2
+8;You and your colleague were trying to examine a dataset, but it was very difficult. You tell your supervisor:;The data was hard to analyze.;Declaratives;broad focus;1IP;lexical stress item;Decl_bf_1ip_stress;6;10;1
+9;Someone asks about your hobbies. You say:;I enjoy photography.;Declaratives;broad focus;1IP;lexical stress item;Decl_bf_1ip_stress;3;7;2
+10;A friend is looking at a photo of you and your brother. You say:;My niece took that photograph.;Declaratives;broad focus;1IP;lexical stress item;Decl_bf_1ip_stress;5;7;1
+11;You just came back from a relaxing vacation. You say:;I feel relaxed and content.;Declaratives;broad focus;1IP;lexical stress item;Decl_bf_1ip_stress;5;7;2
+12;You just found a very informative blog, so you tell your students:;This site has loads of useful content.;Declaratives;broad focus;1IP;lexical stress item;Decl_bf_1ip_stress;7;9;1
+13;You work at a museum and explain the importance of an ancient artefact. You say:;That is a very valuable object.;Declaratives;broad focus;1IP;lexical stress item;Decl_bf_1ip_stress;6;10;1
+14;Your colleagues suggest a new plan, but you disagree. You say:;I would like to object.;Declaratives;broad focus;1IP;lexical stress item;Decl_bf_1ip_stress;5;6;2
+15;Your mother just came back from the store and sees that the garden looks much better than it was before. She asks what happened. You say:;John mowed the lawn.;Declaratives;broad focus;1IP;0;Decl_bf_1ip;4;4;
+16;A friend saw you earlier today and asks you what you did this afternoon. You explain:;I went to the market for a mango.;Declaratives;broad focus;1IP;0;Decl_bf_1ip;8;9;
+17;You and your friends said that you saw a UFO last summer, but now you're admitting the truth:;We were lying.;Declaratives;broad focus;1IP;0;Decl_bf_1ip;3;4;
+18;You�are trying to organize a meeting. You proposed a date, but not all your colleagues could make it. You say to your coworker:;If we have the meeting in June, John will be able to join.;Declaratives;broad focus;2IP;0;Decl_bf_2ip;13;15;
+19;Your friend is going on a trip to the UK. You ask her whether she will bring you back a jar of lemon curd. You tell your mom:;When Amanda returns from London, she will bring me lemon curd.;Declaratives;broad focus;2IP;0;Decl_bf_2ip;11;16;
+20;You and your classmates found a specific book that you needed for a school assignment. Your teacher asks whether you could find an electronic version online. You explain:;The library had the book.;Declaratives;contrastive focus;1IP;0;Decl_prefinal_contrast_1ip;5;7;
+21;You and your housemate have prepared dinner. Your friend Greg enters the room and says, �I bet you made the hamburgers�. You say:;Ron made the hamburgers.;Declaratives;contrastive focus;1IP;0;Decl_prefinal_contrast_1ip;4;7;
+22;Your friend asks you whether you saw his girlfriend at the party that you went to last night. You say:;I heard she was there but I didnt see her.;Declaratives;contrastive focus;2IP;0;Decl_prefinal_contrast_2ip;10;11;
+23;Before going to visit your grandma, you go to the market. You tell your mother afterwards:;We brought her bananas but we forgot that she doesnt like bananas.;Declaratives;contrastive focus;2IP;0;Decl_prefinal_contrast_2ip;12;16;
+24;You and a colleague are talking about pets. She tells you that she owns a golden retriever. You say:;I dont have a dog, but Id love to.;Declaratives;contrastive focus;2IP;0;Decl_prefinal_contrast_2ip;9;9;
+25;You and your friend are talking about the economies of different countries. You are comparing their positions relative to each other and say:;Germany is a leader in import as well as export.;Declaratives;contrastive focus;0;within word contrast;Decl_prefinal_contrast_withinword;10;15;
+26;Your employee comes to you for advice about a business deal. You tell them how important it is to assess the situation critically. You say:;You must consider the advantages and disadvantages of the deal.;Declaratives;contrastive focus;0;within word contrast;Decl_prefinal_contrast_withinword;10;19;
+27;You paid for drinks when you and your friend went out last night. Your friend says, �I owe you five euros, right?�. You say:;Actually you owe me 7 euros. ;Declaratives;corrective focus;0;0;Decl_corrective;6;8;
+28;Your roommate is terrible at being tidy. You tell him:;Your dirty socks need to go in the laundry basket, not near the laundry basket.;Declaratives;corrective focus;0;0;Decl_corrective;15;20;
+29;Your grandmother says that you look tense and wants to know what is going on. You say:;Im not worried, Im actually feeling quite mellow.;Declaratives;corrective focus;0;0;Decl_corrective;8;12;
+30;Your friend asks you how you would explain the difference between your sister and yourself. You say:;Introverts feel good when they are alone. Extroverts feel good with friends.;Declaratives;corrective focus;0;within word contrast;Decl_corrective_withinword;12;17;
+31;Your cousin arrived late to the family gathering and couldn't find you. So, you explain:;"We weren't waiting outside; we were waiting inside.";Declaratives;corrective focus;0;within word contrast;Decl_corrective_withinword;9;13;
+32;Your received a gift from your grandmother. You tell your partner:;My grandma gave me�some�homemade�jam.;Declaratives;broad focus;1IP;stress-switch item;Decl_bf1ip_stress_switch;7;9;2
+33;Your brother asks you what you want for your birthday. You say:;I prefer presents�that�are�homemade.;Declaratives;broad focus;1IP;stress-switch item;Decl_bf1ip_stress_switch;6;9;1
+34;You tell a colleague about your�favorite�holiday destinations:;I used�to go on holiday�to the�North�Sea.;Declaratives;broad focus;1IP;stress-switch item;Decl_bf1ip_stress_switch;10;12;1
+35;You're a politician and you explain your plans to the voters:;Europe's energy demand requires�North Sea�oil.;Declaratives;broad focus;1IP;stress-switch item;Decl_bf1ip_stress_switch;7;13;2
+36;You just found a fun fact,�so you share it with a friend:;The record for sailing around the world is�52 days.;Declaratives;broad focus;1IP;stress-switch item;Decl_bf1ip_stress_switch;10;14;2
+37;You're going to school and inform your teacher:;Last week my dad turned 52.;Declaratives;broad focus;1IP;stress-switch item;Decl_bf1ip_stress_switch;7;8;1
+38;You and your grandfather are taking a boat trip. You want to look at the water and ask:;May I lean on the railings?;Interrogatives;polar question;0;0;Inter_pq;6;7;
+39;You want to be excused from the table and say:;May I be excused?;Interrogatives;polar question;0;0;Inter_pq;4;5;
+40;The coffee machine seems broken. You want to fix it and ask your roommate:;Where is the manual?;Interrogatives;wh-question;0;0;Inter_whq;4;6;
+41;Your cousin is going to take a trip to Spain. You are curious about her plans and ask:;When will you be in Malaga?;Interrogatives;wh-question;0;0;Inter_whq;6;8;
+42;You and your friend are watching a movie. But you have run out of popcorn. You ask:;Who will make more?;Interrogatives;wh-question;0;0;Inter_whq;4;4;
+43;You tried to call your friend, but she didn�t pick up. Later, she tells you that she didn�t lose her phone but that she just didn�t want to talk. You say:;You were lying?;Interrogatives;statement question;0;0;Inter_sq;3;4;
+44;You think that you may need a lawyer. Your cousin says that you should call her friend Marion. You say:;Marion is a lawyer?;Interrogatives;statement question;0;0;Inter_sq;4;6;
+45;You and your friends are planning a party. You had hoped that John would come as well, but someone told you that he has other plans. You say:;John isnt coming, is he?;Interrogatives;tag question;positive;0;Inter_tq_pos;5;7;
+46;You are interviewing a potential new flatmate. You would like someone clean and respectful. You ask:;Youre not noisy, are you?;Interrogatives;tag question;positive;0;Inter_tq_pos;5;6;
+47;You and a group of friends have rented a house for the weekend. You are discussing how everyone is getting there. You say:;Robert is coming by train, isnt he?;Interrogatives;tag question;negative;0;Inter_tq_neg;7;8;
+48;You are at a potluck dinner. Everyone has brought a dish to share. There is no more salad left. You say:;Harry will make more, wont he?;Interrogatives;tag question;negative;0;Inter_tq_neg;6;7;
+49;Your grandchildren make a lot of noise, and you can�t hear a word of the news on TV. You ask them to be quiet:;Will you be quiet?;Imperatives;question imperatives;0;0;Imp_q;4;5;
+50;Your friend said that she would help you clean your mom�s car. You are working hard, but she is just standing there chatting to you. You say:;Will you help me with this?;Imperatives;question imperatives;0;0;Imp_q;6;6;
+51;Your nephew is refusing to sit still while you are trying to put his mittens on. You say:;Dont move your hands!;Imperatives;order imperatives;0;0;Imp_order;4;4;
+52;Your brother won�t leave your room even though you have asked for privacy. You say:;Leave me alone!;Imperatives;order imperatives;0;0;Imp_order;3;4;
+53;You and your colleague share an office. It�s very hot inside. You say:;Open the window, will you?;Imperatives;tag imperatives;0;0;Imp_tag;5;7;
+54;You and your sister are making a fruit salad. You say:;Hand me the oranges, will you?;Imperatives;tag imperatives;0;0;Imp_tag;6;8;
+55;Your friend has just run a marathon. You meet her after the finish line. You say:;You were amazing!;Exclamatives;0;0;0;Exclamative;3;5;
+56;You and your friend are thinking of things to do during your vacation. You remember that there is a beach near your campsite that you can reach by public transportation. You say:;I have an idea!��;Exclamatives;0;0;0;Exclamative;4;5;
+57;Your friend Paula has recently gotten a dog. Your mother asks what you gave Paula for her birthday. You say:;I gave her dog food.;Disambiguation;0;0;0;Disambiguation;5;5;
+58;In a store, you and Gemma see the woman whom Gemma�s ex-boyfriend cheated on her with. You just came out of the rain and are holding umbrellas. You tell your mother what happened next:;Gemma hit the woman with the umbrella.;Disambiguation;0;0;0;Disambiguation;7;11;
+59;Your brother loves miniature landscapes. When asked what you gave him for Christmas, you say:;I gave Rory a toy factory.;Disambiguation;0;0;0;Disambiguation;6;9;
+60;You and your neighbour are talking about her fruit trees. You say:;Are you growing lemons or limes?;Coordination;0;0;0;Coordination;6;8;
+61;You and your friend are talking about home decoration. You can�t hear her well and ask her to clarify what she just said:;Did you say mellow or yellow?;Coordination;0;0;0;Coordination;6;8;
+62;You have two friends, John and Hannah. John is a nice person but not very ambitious, while Hannah is always thinking of ways to improve the city you live in. Now your neighbour tells you that John is running for mayor. You express your surprise:;John is running for mayor?;Highlighting;0;0;0;Highlighting;5;7;
+63;You are travelling by train, and an elderly lady has just entered the car. You offer her your seat:;Would you like to take this seat?;Politeness;0;0;0;Politeness;7;7;
+64;You work at a hotel as a receptionist. A man comes in wanting to book a room. You hand him a form that he should fill in:;Would you fill out this form, please?;Politeness;0;0;0;Politeness;7;7;
+65;Hannah is late meeting up with Sam. When she finally arrives, Sam says:;Right on time again, Hannah.;Sarcasm;0;0;0;Sarcasm;5;7;
+66;Molly used to have long hair, but she has just cut it very short. Simon doesn�t like the way Molly looks now. He is talking to his friend Bill and says:;Well Mollys new hairstyle looks amazing.;Sarcasm;0;0;0;Sarcasm;6;10;
+
