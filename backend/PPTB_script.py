@@ -49,10 +49,10 @@ AUDIO_DIR = Path(r"Audio")
 #AUDIO_DIR = BASE_DIR / "Audio" / "L1_audio"
 TEXTGRID_DIR = Path(r"TextGrids")
 #TEXTGRID_DIR = BASE_DIR / "TextGrids" / "L1_TextGrids"
-SCRIPT_PATH = BASE_DIR / "Praat_Scripts" / "measure_acoustics_v3.praat"
+SCRIPT_PATH = BASE_DIR / "measure_acoustics_v3.praat"
 METADATA_PATH = BASE_DIR / "metadata.csv"
 
-PRAAT_EXE = Path(r"C:\Program Files\Praat\Praat.exe")
+PRAAT_EXE = Path(r"/usr/local/bin/praat")
 
 OUTPUT_DIR = BASE_DIR / "Output"
 OUTPUT_DIR.mkdir(exist_ok=True)
@@ -63,7 +63,7 @@ FINAL_OUTPUT = OUTPUT_DIR / "full_output_test.csv"                 # merged ASR 
 
 
 # === Define paths ===
-CORPUS_DIR = r"Audio" # define path to audio corpus
+CORPUS_DIR = r"/var/www/repo/backend/Audio" # define path to audio corpus
 OUTPUT_DIR = r"TextGrids" # define path to save TextGrid files from MFA alignment
 
 # define MFA models (requires MFA installation and model downloads)
@@ -71,7 +71,7 @@ DICTIONARY = "english_us_arpa"
 ACOUSTIC_MODEL = "english_us_arpa"
 
 # define Whisper model (requires Whisper installation and model download)
-WHISPER_MODEL_SIZE = "tiny"  # Options: "tiny", "base", "small", "medium", "large"
+WHISPER_MODEL_SIZE = "large"  # Options: "tiny", "base", "small", "medium", "large"
 
 # === Load Whisper model ===
 print("Loading Whisper model...")

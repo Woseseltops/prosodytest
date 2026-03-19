@@ -72,9 +72,12 @@ sound = Read from file: input_file$
 ############################################################################################################################# 
 
 speech_activity_txtgrd = To TextGrid (speech activity): 0, 0.3, 0.1, 70, 6000, -10, -35, 0.5, 0.5, "", "speech"
+writeInfoLine: "speech_activity_tg ID: ", speech_activity_txtgrd
 
 # combine original textgrid with speech activity textgrid
-Extract one tier: 1
+selectObject: speech_activity_txtgrd
+speech_activity_txtgrd_tier = Extract one tier: 1
+selectObject: speech_activity_txtgrd_tier
 plusObject: txtgrd
 Merge: "yes"
 Rename: "merged_tg"
@@ -172,6 +175,7 @@ minPitch = 50
 maxPitch = 800
 
 # extract pitch contour using default pitch floor and ceiling values
+selectObject: sound
 To Pitch (filtered autocorrelation): 0, minPitch, maxPitch, 15, "no", 0.03, 0.09, 0.5, 0.055, 0.35, 0.14
 pitchName$ = selected$("Pitch")
 
